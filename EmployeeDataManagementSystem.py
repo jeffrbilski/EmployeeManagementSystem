@@ -19,9 +19,12 @@ def dateStringIsValid(dateString):
     isValid = False
 
     #first, determine the size to make sure it is right format
-    if len(dateString) == 10
-        if dateString[3] == "/" and dateString[6] == "/"
-            isValid == True
+    #
+    #should changes this to find where the '/' are and remove them, then check if is numeric
+    #there are too many cases to check here, also if the day/month is in the right range
+    if len(dateString) == 10:
+        if dateString[2] == '/' and dateString[5] == '/':
+            isValid = True
 
     return isValid
 
@@ -64,35 +67,25 @@ def getDateInput(outputText):
     return inputString
 
 #--------------------------------------------------------
-# Summary: Validates mainMenuSelection is a valid option
-# Paremeters: mainMenuSelection = the variable to validate
-# Returns: true if mainMenuSelection is in validOptions
-
-def validateMainMenuSelection(mainMenuSelection):
-    validOptions = [1,2,3,4]
-    returnVal = False
-
-    if mainMenuSelection in validOptions:
-        returnVal = True
-
-    return returnVal
-
-#--------------------------------------------------------
 # Summary: Adds a new entry to the master data list
 
 def addNewEntry():
     print("Enter the employee's info for each prompt. \n\n")
     firstName = ""
     lastName = ""
-    birthdate = ""
+    birthDate = ""
     position = ""
     newEntry = []
 
-    firstName = getLetterInput("First name")
-    lastName = getLetterInput("Last name")
-    birthDate = getDateInput("Birthday")
-    position = getLetterInput("Position")
-    startDate = getDateInput("Start date")
+    try:
+        firstName = getLetterInput("First name")
+        lastName = getLetterInput("Last name")
+        birthDate = getDateInput("Birthday")
+        position = getLetterInput("Position")
+        startDate = getDateInput("Start date")
+    except:
+        print("Unable to add entry:")
+    
 
     newEntry.append(firstName)
     newEntry.append(lastName)
@@ -104,8 +97,30 @@ def addNewEntry():
 
 #--------------------------------------------------------
 
-def queryEntry():
+def searchByString(menuSelection):
     pass
+
+def searchByDate(menuSelection):
+    pass
+
+#--------------------------------------------------------
+
+def queryEntry():
+    menuSelection = 0
+    
+    print("What would you like to search by?")
+    print("1.) First name")
+    print("2.) Last name")
+    print("3.) Birthday name")
+    print("4.) Position")
+    print("5.) Start date")
+    
+    menuSelection = input("\nEnter a selection: ")
+
+    if menuSelection == 1 or menuSelection == 2 or menuSelection == 4:
+        searchByString(menuSelection)
+    elif menuSelection == 3 or menuSelection == 5:
+        searchByDate(menuSelection)
 
 #--------------------------------------------------------
 
@@ -121,13 +136,12 @@ def deleteEntry():
 # Outputs the main menu prompt
 
 def outputMainMenu():
-    print("What would you like to do? \n")
-    print("1.) Add a new employee entry \n")
-    print("2.) Query an existing employee \n")
-    print("3.) Import from a text file \n")
-    print("4.) Exit \n")
-    print("\n")
-    
+    print("\nWhat would you like to do?")
+    print("1.) Add a new employee entry")
+    print("2.) Query an existing employee")
+    print("3.) Import from a text file")
+    print("4.) Exit")
+
 #--------------------------------------------------------
 # Summary: main function
 
@@ -138,23 +152,25 @@ def runSystem():
     systemState = 1
     mainMenuSelection = 0
 
-    print("Welcome to Employee Management System.\n\n")
+    print("Welcome to Employee Management System.")
 
     while systemState > 0:
         outputMainMenu()
-        mainMenuSelection = input("Enter a selection:")
-
-        if not validateMainMenuSelection(mainMenuSelection):
+        mainMenuSelection = input("\nEnter a selection: ")
+        
+        if mainMenuSelection == "1":
+            addNewEntry()
+        elif mainMenuSelection == "2":
+            queryEntry()
+        elif mainMenuSelection == "3":
+            importData()
+        elif mainMenuSelection == "4":
+            print("Goodbye. \n")
+            systemState = 0
+        else:
             print("You entered: "  + mainMenuSelection + "\n")
             print("This is invalid. Please select an option from the menu. \n")
-        else:
-            if mainMenuSelection == 1:
-                addNewEntry()
-            elif mainMenuSelection == 2:
-                queryEntry()
-            elif mainMenuSelection == 3:
-                importData()
-            elif mainMenuSelection == 4:
-                print("Goodbye. \n")
-                systemState = 0
 
+# program will run by running our script on the command line
+if __name__ == "__main__":
+	runSystem()
